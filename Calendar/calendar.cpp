@@ -194,13 +194,14 @@ bool checkEventsOverlap(const calendar_event& event1, const calendar_event& even
 
 void Calendar::on_pushButton_nextPage_clicked()
 {
-
+    go_to_page(current_page + 1);
 }
 
 
 void Calendar::on_pushButton_previousPage_clicked()
 {
-
+    //assert(currentpage>=1);
+    go_to_page(current_page - 1);
 }
 
 
@@ -212,15 +213,19 @@ void Calendar::go_to_page(int page){
 
     int number_of_events  = c_map[current_date].size();
     int shown_events = 0;
-    // start
+
     QVector<QHBoxLayout*> layouts = {
         ui->centralwidget->findChild<QHBoxLayout*>("horizontalLayout_data_1"),
         ui->centralwidget->findChild<QHBoxLayout*>("horizontalLayout_data_2"),
         ui->centralwidget->findChild<QHBoxLayout*>("horizontalLayout_data_3")
     };
-    //QHBoxLayout* layout1 = ui->centralwidget->findChild<QHBoxLayout*>("horizontalLayout_data_1");
-    //QHBoxLayout* layout2 = ui->centralwidget->findChild<QHBoxLayout*>("horizontalLayout_data_2");
-    //QHBoxLayout* layout3 = ui->centralwidget->findChild<QHBoxLayout*>("horizontalLayout_data_3");
+    //QLabel* labels[] = {} ma così sono piu tranquillo
+    QVector<QLabel*> labels = {
+        ui->label_descrizione_1,
+        ui->label_descrizione_2,
+        ui->label_descrizione_3
+    };
+
     for (const auto& lyt : layouts){
         if (lyt &&
             ((current_page*3) + shown_events) >=
@@ -232,7 +237,11 @@ void Calendar::go_to_page(int page){
                 }
             }
         }else{
+            assert (lyt!= nullptr);
             qDebug()<< "fill event";
+            labels[shown_events]->setText(c_map[current_date]
+                                               [(current_page*3)+shown_events]
+                                                   .descr);
             for (int i = 0; i < lyt->count(); ++i) {
                 QWidget* widget = lyt->itemAt(i)->widget();
                 if (widget){
@@ -242,45 +251,12 @@ void Calendar::go_to_page(int page){
         shown_events += 1;
         }
     }
+    if (shown_events < 3){
+        ui->pushButton_nextPage->setEnabled(false);
+    }
+    if (current_page > 0){
+        ui->pushButton_previousPage->setEnabled(true);
+    }
 }
 
-
-    /*
-    // Set the visibility of the contents within the layouts to false if they exist
-    if (layout1 && ((current_page*3) + shown_events ) >= (number_of_events - 1)) {
-        for (int i = 0; i < layout1->count(); ++i) {
-            QWidget* widget = layout1->itemAt(i)->widget();
-            if (widget)
-                widget->setVisible(false);
-        }
-    }else{
-        qDebug()<< "fill event 1";
-        shown_events += 1;
-    }
-
-    if (layout2 && ((current_page*3) + shown_events ) >= (number_of_events - 1)) {
-        for (int i = 0; i < layout2->count(); ++i) {
-            QWidget* widget = layout2->itemAt(i)->widget();
-            if (widget)
-                widget->setVisible(false);
-        }
-    }else{
-        qDebug()<< "fill event 2";
-        shown_events += 1;
-    }
-
-    if (layout3 && ((current_page*3) + shown_events ) >= (number_of_events - 1)) {
-        for (int i = 0; i < layout3->count(); ++i) {
-            QWidget* widget = layout3->itemAt(i)->widget();
-            if (widget)
-                widget->setVisible(false);
-        }
-    }else{
-        qDebug()<< "fill event 3";
-        //shown_events += 1;
-    }
-
-}*/
-
-
-
+// todo disable > button on some conditions
