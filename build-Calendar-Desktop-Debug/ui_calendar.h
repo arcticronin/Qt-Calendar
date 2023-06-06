@@ -18,6 +18,7 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTimeEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -34,6 +35,7 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_2;
     QLabel *label;
+    QLabel *label_vecSize_2;
     QLabel *label_vecSize;
     QHBoxLayout *horizontalLayout_9;
     QPushButton *pushButton_previousPage;
@@ -70,6 +72,7 @@ public:
     QTimeEdit *timeEdit_end;
     QComboBox *comboBox_ripetizione;
     QPushButton *pushButton;
+    QSpacerItem *verticalSpacer;
 
     void setupUi(QMainWindow *Calendar)
     {
@@ -90,7 +93,7 @@ public:
         centralwidget->setSizePolicy(sizePolicy1);
         verticalLayoutWidget = new QWidget(centralwidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(0, 0, 559, 435));
+        verticalLayoutWidget->setGeometry(QRect(0, 0, 625, 441));
         verticalLayout_main = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_main->setObjectName(QString::fromUtf8("verticalLayout_main"));
         verticalLayout_main->setSizeConstraint(QLayout::SetDefaultConstraint);
@@ -106,6 +109,9 @@ public:
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         label_2 = new QLabel(verticalLayoutWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
+        QFont font;
+        font.setPointSize(14);
+        label_2->setFont(font);
 
         horizontalLayout_2->addWidget(label_2);
 
@@ -116,14 +122,22 @@ public:
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
         label->setSizePolicy(sizePolicy2);
-        QFont font;
-        font.setBold(true);
-        label->setFont(font);
+        QFont font1;
+        font1.setPointSize(14);
+        font1.setBold(true);
+        label->setFont(font1);
 
         horizontalLayout_2->addWidget(label);
 
+        label_vecSize_2 = new QLabel(verticalLayoutWidget);
+        label_vecSize_2->setObjectName(QString::fromUtf8("label_vecSize_2"));
+        label_vecSize_2->setFont(font);
+
+        horizontalLayout_2->addWidget(label_vecSize_2);
+
         label_vecSize = new QLabel(verticalLayoutWidget);
         label_vecSize->setObjectName(QString::fromUtf8("label_vecSize"));
+        label_vecSize->setFont(font);
 
         horizontalLayout_2->addWidget(label_vecSize);
 
@@ -136,20 +150,23 @@ public:
         sizePolicy3.setVerticalStretch(0);
         sizePolicy3.setHeightForWidth(pushButton_previousPage->sizePolicy().hasHeightForWidth());
         pushButton_previousPage->setSizePolicy(sizePolicy3);
-        QFont font1;
-        font1.setBold(false);
-        pushButton_previousPage->setFont(font1);
+        QFont font2;
+        font2.setPointSize(14);
+        font2.setBold(false);
+        pushButton_previousPage->setFont(font2);
 
         horizontalLayout_9->addWidget(pushButton_previousPage);
 
         label_page = new QLabel(verticalLayoutWidget);
         label_page->setObjectName(QString::fromUtf8("label_page"));
+        label_page->setFont(font);
         label_page->setWordWrap(false);
 
         horizontalLayout_9->addWidget(label_page);
 
         pushButton_nextPage = new QPushButton(verticalLayoutWidget);
         pushButton_nextPage->setObjectName(QString::fromUtf8("pushButton_nextPage"));
+        pushButton_nextPage->setFont(font);
 
         horizontalLayout_9->addWidget(pushButton_nextPage);
 
@@ -163,6 +180,7 @@ public:
         horizontalLayout_data_1->setObjectName(QString::fromUtf8("horizontalLayout_data_1"));
         label_tipo_1 = new QLabel(verticalLayoutWidget);
         label_tipo_1->setObjectName(QString::fromUtf8("label_tipo_1"));
+        label_tipo_1->setFont(font);
 
         horizontalLayout_data_1->addWidget(label_tipo_1);
 
@@ -173,31 +191,37 @@ public:
         sizePolicy4.setVerticalStretch(0);
         sizePolicy4.setHeightForWidth(label_descrizione_1->sizePolicy().hasHeightForWidth());
         label_descrizione_1->setSizePolicy(sizePolicy4);
+        label_descrizione_1->setFont(font);
 
         horizontalLayout_data_1->addWidget(label_descrizione_1);
 
         label_start_1 = new QLabel(verticalLayoutWidget);
         label_start_1->setObjectName(QString::fromUtf8("label_start_1"));
+        label_start_1->setFont(font);
 
         horizontalLayout_data_1->addWidget(label_start_1);
 
         label_end_1 = new QLabel(verticalLayoutWidget);
         label_end_1->setObjectName(QString::fromUtf8("label_end_1"));
+        label_end_1->setFont(font);
 
         horizontalLayout_data_1->addWidget(label_end_1);
 
         label_ripetizione_1 = new QLabel(verticalLayoutWidget);
         label_ripetizione_1->setObjectName(QString::fromUtf8("label_ripetizione_1"));
+        label_ripetizione_1->setFont(font);
 
         horizontalLayout_data_1->addWidget(label_ripetizione_1);
 
         pushButton_edit_1 = new QPushButton(verticalLayoutWidget);
         pushButton_edit_1->setObjectName(QString::fromUtf8("pushButton_edit_1"));
+        pushButton_edit_1->setFont(font);
 
         horizontalLayout_data_1->addWidget(pushButton_edit_1);
 
         pushButton_delete_1 = new QPushButton(verticalLayoutWidget);
         pushButton_delete_1->setObjectName(QString::fromUtf8("pushButton_delete_1"));
+        pushButton_delete_1->setFont(font);
 
         horizontalLayout_data_1->addWidget(pushButton_delete_1);
 
@@ -208,36 +232,43 @@ public:
         horizontalLayout_data_2->setObjectName(QString::fromUtf8("horizontalLayout_data_2"));
         label_tipo_2 = new QLabel(verticalLayoutWidget);
         label_tipo_2->setObjectName(QString::fromUtf8("label_tipo_2"));
+        label_tipo_2->setFont(font);
 
         horizontalLayout_data_2->addWidget(label_tipo_2);
 
         label_descrizione_2 = new QLabel(verticalLayoutWidget);
         label_descrizione_2->setObjectName(QString::fromUtf8("label_descrizione_2"));
+        label_descrizione_2->setFont(font);
 
         horizontalLayout_data_2->addWidget(label_descrizione_2);
 
         label_start_2 = new QLabel(verticalLayoutWidget);
         label_start_2->setObjectName(QString::fromUtf8("label_start_2"));
+        label_start_2->setFont(font);
 
         horizontalLayout_data_2->addWidget(label_start_2);
 
         label_end_2 = new QLabel(verticalLayoutWidget);
         label_end_2->setObjectName(QString::fromUtf8("label_end_2"));
+        label_end_2->setFont(font);
 
         horizontalLayout_data_2->addWidget(label_end_2);
 
         label_ripetizione_2 = new QLabel(verticalLayoutWidget);
         label_ripetizione_2->setObjectName(QString::fromUtf8("label_ripetizione_2"));
+        label_ripetizione_2->setFont(font);
 
         horizontalLayout_data_2->addWidget(label_ripetizione_2);
 
         pushButton_edit_2 = new QPushButton(verticalLayoutWidget);
         pushButton_edit_2->setObjectName(QString::fromUtf8("pushButton_edit_2"));
+        pushButton_edit_2->setFont(font);
 
         horizontalLayout_data_2->addWidget(pushButton_edit_2);
 
         pushButton_delete_2 = new QPushButton(verticalLayoutWidget);
         pushButton_delete_2->setObjectName(QString::fromUtf8("pushButton_delete_2"));
+        pushButton_delete_2->setFont(font);
 
         horizontalLayout_data_2->addWidget(pushButton_delete_2);
 
@@ -248,36 +279,43 @@ public:
         horizontalLayout_data_3->setObjectName(QString::fromUtf8("horizontalLayout_data_3"));
         label_tipo_3 = new QLabel(verticalLayoutWidget);
         label_tipo_3->setObjectName(QString::fromUtf8("label_tipo_3"));
+        label_tipo_3->setFont(font);
 
         horizontalLayout_data_3->addWidget(label_tipo_3);
 
         label_descrizione_3 = new QLabel(verticalLayoutWidget);
         label_descrizione_3->setObjectName(QString::fromUtf8("label_descrizione_3"));
+        label_descrizione_3->setFont(font);
 
         horizontalLayout_data_3->addWidget(label_descrizione_3);
 
         label_start_3 = new QLabel(verticalLayoutWidget);
         label_start_3->setObjectName(QString::fromUtf8("label_start_3"));
+        label_start_3->setFont(font);
 
         horizontalLayout_data_3->addWidget(label_start_3);
 
         label_end_3 = new QLabel(verticalLayoutWidget);
         label_end_3->setObjectName(QString::fromUtf8("label_end_3"));
+        label_end_3->setFont(font);
 
         horizontalLayout_data_3->addWidget(label_end_3);
 
         label_ripetizione_3 = new QLabel(verticalLayoutWidget);
         label_ripetizione_3->setObjectName(QString::fromUtf8("label_ripetizione_3"));
+        label_ripetizione_3->setFont(font);
 
         horizontalLayout_data_3->addWidget(label_ripetizione_3);
 
         pushButton_edit_3 = new QPushButton(verticalLayoutWidget);
         pushButton_edit_3->setObjectName(QString::fromUtf8("pushButton_edit_3"));
+        pushButton_edit_3->setFont(font);
 
         horizontalLayout_data_3->addWidget(pushButton_edit_3);
 
         pushButton_delete_3 = new QPushButton(verticalLayoutWidget);
         pushButton_delete_3->setObjectName(QString::fromUtf8("pushButton_delete_3"));
+        pushButton_delete_3->setFont(font);
 
         horizontalLayout_data_3->addWidget(pushButton_delete_3);
 
@@ -291,21 +329,25 @@ public:
         comboBox_evento->addItem(QString());
         comboBox_evento->addItem(QString());
         comboBox_evento->setObjectName(QString::fromUtf8("comboBox_evento"));
+        comboBox_evento->setFont(font);
 
         horizontalLayout->addWidget(comboBox_evento);
 
         lineEdit = new QLineEdit(verticalLayoutWidget);
         lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+        lineEdit->setFont(font);
 
         horizontalLayout->addWidget(lineEdit);
 
         timeEdit_start = new QTimeEdit(verticalLayoutWidget);
         timeEdit_start->setObjectName(QString::fromUtf8("timeEdit_start"));
+        timeEdit_start->setFont(font);
 
         horizontalLayout->addWidget(timeEdit_start);
 
         timeEdit_end = new QTimeEdit(verticalLayoutWidget);
         timeEdit_end->setObjectName(QString::fromUtf8("timeEdit_end"));
+        timeEdit_end->setFont(font);
 
         horizontalLayout->addWidget(timeEdit_end);
 
@@ -313,17 +355,24 @@ public:
         comboBox_ripetizione->addItem(QString());
         comboBox_ripetizione->addItem(QString());
         comboBox_ripetizione->addItem(QString());
+        comboBox_ripetizione->addItem(QString());
         comboBox_ripetizione->setObjectName(QString::fromUtf8("comboBox_ripetizione"));
+        comboBox_ripetizione->setFont(font);
 
         horizontalLayout->addWidget(comboBox_ripetizione);
 
         pushButton = new QPushButton(verticalLayoutWidget);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton->setFont(font);
 
         horizontalLayout->addWidget(pushButton);
 
 
         verticalLayout_main->addLayout(horizontalLayout);
+
+        verticalSpacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        verticalLayout_main->addItem(verticalSpacer);
 
         Calendar->setCentralWidget(centralwidget);
 
@@ -337,6 +386,7 @@ public:
         Calendar->setWindowTitle(QCoreApplication::translate("Calendar", "Calendar", nullptr));
         label_2->setText(QCoreApplication::translate("Calendar", "Selected:", nullptr));
         label->setText(QCoreApplication::translate("Calendar", "TextLabel", nullptr));
+        label_vecSize_2->setText(QCoreApplication::translate("Calendar", "events today:", nullptr));
         label_vecSize->setText(QCoreApplication::translate("Calendar", "TextLabel", nullptr));
         pushButton_previousPage->setText(QCoreApplication::translate("Calendar", "<", nullptr));
         label_page->setText(QCoreApplication::translate("Calendar", "0", nullptr));
@@ -366,8 +416,9 @@ public:
         comboBox_evento->setItemText(1, QCoreApplication::translate("Calendar", "Evento", nullptr));
 
         comboBox_ripetizione->setItemText(0, QCoreApplication::translate("Calendar", "-", nullptr));
-        comboBox_ripetizione->setItemText(1, QCoreApplication::translate("Calendar", "Mensile", nullptr));
-        comboBox_ripetizione->setItemText(2, QCoreApplication::translate("Calendar", "Annuale", nullptr));
+        comboBox_ripetizione->setItemText(1, QCoreApplication::translate("Calendar", "Settimanale", nullptr));
+        comboBox_ripetizione->setItemText(2, QCoreApplication::translate("Calendar", "Mensile", nullptr));
+        comboBox_ripetizione->setItemText(3, QCoreApplication::translate("Calendar", "Annuale", nullptr));
 
         pushButton->setText(QCoreApplication::translate("Calendar", "Create", nullptr));
     } // retranslateUi

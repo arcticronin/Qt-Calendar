@@ -10,6 +10,7 @@
 #include <QLayout>
 #include <QBoxLayout>
 #include <QMainWindow>
+#include<QTextCharFormat>
 //#include <QList>
 //#include <QLayout>
 
@@ -50,6 +51,8 @@ Calendar::Calendar(QWidget *parent)
     //QWidget* centralWidget = new QWidget(this);
     //centralWidget->setLayout(ui->verticalLayout_main);
     //this->setCentralWidget(centralWidget);
+    this->ui->centralwidget->setLayout(ui->verticalLayout_main);
+    this->setCentralWidget(ui->centralwidget);
 }
 
 Calendar::~Calendar()
@@ -65,7 +68,10 @@ void Calendar::update_ui(){
     current_page = 0;
     ui->pushButton_previousPage->setEnabled(false);
     auto it = this->c_map.find(current_date);
-    if (it != this->c_map.end()) {
+    //if (it != this->c_map.end()) {
+    if (it != this->c_map.end()&&
+        !c_map[current_date].empty())
+    {
         qDebug() <<  "eventi presenti" ;
         ui->label_vecSize->setText(QString::number(c_map[current_date].size()));
         (c_map[current_date].size()<= 3)?
@@ -79,7 +85,8 @@ void Calendar::update_ui(){
         ui->pushButton_nextPage->setEnabled(false);
     }
     ui->label->setText(current_date.toString("dd/MM/yyyy"));
-    this->go_to_page(0);
+    this->setColors();
+    this->go_to_page(current_page);
 }
 
 
@@ -132,16 +139,15 @@ void Calendar::on_pushButton_clicked(){
 
     }
 
-
-
-
     calendar_event tmp(tmp_type, tmp_descr, tmp_time_start, tmp_time_end,
                        tmp_repeat);
     qDebug() << "printing tmp";
     tmp.print();
 
     // inner check for single event time coherence
-    if (ui->timeEdit_start->time() >=
+    if(ui->timeEdit_end->time()== QTime(0,0)){
+        qDebug() << "evento singolo";
+    }else if (ui->timeEdit_start->time() >=
         ui->timeEdit_end->time()){
         qDebug() << "WARNING orario inserito non valido, vado lo stesso";
         return;
@@ -152,6 +158,7 @@ void Calendar::on_pushButton_clicked(){
         qDebug() << "creo una nuova pagina per " << current_date.toString() ;
         c_map[current_date] = QVector<calendar_event>();
     }
+
     // check overlapping
     for (int i = 0; i < c_map[current_date].size(); i++){
         if (checkEventsOverlap(tmp, c_map[current_date][i])){
@@ -159,12 +166,13 @@ void Calendar::on_pushButton_clicked(){
         }
     }
 
+
     // se è montly o yearly controlla che non ci siano sovrapposizioni
     // su tutte le chiavi della mappa
 
     // check on map
-
-    c_map[current_date].push_back(tmp);
+    insert_event(tmp, tmp.repeat);
+    //c_map[current_date].push_back(tmp);
     //qSort(c_map[current_date]);
     std::sort(c_map[current_date].begin(),
               c_map[current_date].end());
@@ -173,6 +181,76 @@ void Calendar::on_pushButton_clicked(){
     this->update_ui();
 }
 
+void Calendar::insert_event(calendar_event e, event_repeat rep){
+    switch (rep){
+    case WEEKLY:
+        for (QDate d = current_date;
+             d < ui->calendarWidget->maximumDate();
+             d = d.addDays(7)){
+            for (int i = 0; i < c_map[d].size(); i++){
+                if (checkEventsOverlap(e, c_map[d][i])){
+                    qDebug() << "event is overlapping";
+                    //return;
+                }
+            }
+        }
+        for (QDate d = current_date;
+             d < ui->calendarWidget->maximumDate();
+             d = d.addDays(7))
+        {
+                c_map[d].push_back(e);
+                std::sort(c_map[d].begin(),c_map[d].end());
+        }
+        break;
+
+    case MONTHLY:
+        for (QDate d = current_date;
+             d < ui->calendarWidget->maximumDate();
+             d = d.addMonths(1)){
+            for (int i = 0; i < c_map[d].size(); i++){
+                if (checkEventsOverlap(e, c_map[d][i])){
+                    qDebug() << "event is overlapping";
+                    //return;
+                }
+            }
+        }
+        for (QDate d = current_date;
+             d < ui->calendarWidget->maximumDate();
+             d = d.addMonths(1))
+        {
+                c_map[d].push_back(e);
+                std::sort(c_map[d].begin(),c_map[d].end());
+        }
+        break;
+    case YEARLY:
+        for (QDate d = current_date;
+             d < ui->calendarWidget->maximumDate();
+             d = d.addYears(1)){
+                for (int i = 0; i < c_map[d].size(); i++){
+                    if (checkEventsOverlap(e, c_map[d][i])){
+                        qDebug() << "event is overlapping";
+                        //return;
+                    }
+                }     }
+        for (QDate d = current_date;
+             d < ui->calendarWidget->maximumDate();
+             d = d.addYears(1))
+        {
+                c_map[d].push_back(e);
+                std::sort(c_map[d].begin(),c_map[d].end());
+        }
+
+        break;
+    default:
+        for (int i = 0; i < c_map[current_date].size(); i++){
+            if (checkEventsOverlap(e, c_map[current_date][i])){
+            qDebug() << "event is overlapping";
+            //return;
+            }
+        }
+        c_map[current_date].push_back(e);
+    }
+}
 
 void Calendar::on_comboBox_evento_currentIndexChanged(int index){
     if (index == 1){
@@ -203,14 +281,27 @@ bool operator<(const calendar_event& lhs,
 }
 
 
-// check for ovarlapping
+// check for ovarlapping -> true if overlaps
 bool checkEventsOverlap(const calendar_event& event1,
                         const calendar_event& event2) {
-    if (event1.time_end <= event2.time_start ||
+    if (event1.time_end == QTime(0,0)&&
+        event2.time_end == QTime(0,0)){
+        return event1.time_start == event2.time_start;
+    }
+    else if (event1.time_end == QTime(0,0)){
+        return (event1.time_start > event2.time_start &&
+                event1.time_start < event2.time_end);
+    }
+    else if (event2.time_end == QTime(0,0)){
+        return (event2.time_start > event1.time_start &&
+                event2.time_start < event1.time_end);
+    }
+    else if (event1.time_end <= event2.time_start ||
         event2.time_end <= event1.time_start) {
-        return false;  // events do not overlap
-    } else {
-        return true; // events overlap
+        return false;
+    }
+    else {
+        return true;
     }
 }
 
@@ -231,6 +322,7 @@ void Calendar::on_pushButton_previousPage_clicked()
 
 void Calendar::go_to_page(int page){
     current_page = page;
+    ui->label_vecSize->setText(QString::number(c_map[current_date].size()));
     ui->label_page->setText(QString::number(page));
     (current_page > 1)?
         ui->pushButton_previousPage->setEnabled(true):
@@ -238,7 +330,7 @@ void Calendar::go_to_page(int page){
 
     int number_of_events  = c_map[current_date].size();
 
-    (number_of_events - (current_page * 3) > 0)?
+    (number_of_events - (current_page * 3) > 3)?
         ui->pushButton_nextPage->setEnabled(true):
         ui->pushButton_nextPage->setEnabled(false);
 
@@ -296,9 +388,12 @@ void Calendar::go_to_page(int page){
             time_start_labels[shown_events]->setText(c_map[current_date]
                                                [(current_page*3)+shown_events]
                                                    .time_start.toString());
-            time_end_labels[shown_events]->setText(c_map[current_date]
+            (c_map[current_date][(current_page*3)+shown_events]
+                 .time_end !=   QTime(0,0))?
+                time_end_labels[shown_events]->setText(c_map[current_date]
                                                [(current_page*3)+shown_events]
-                                                   .time_end.toString());
+                                                   .time_end.toString()):
+                time_end_labels[shown_events]->setText("-");
             tipo_labels[shown_events]->setText(event_type_to_string
                                                       (c_map[current_date]
                                                [(current_page*3)+shown_events]
@@ -347,14 +442,66 @@ QString event_repeat_to_string(event_repeat e){
         //break;
     case MONTHLY:
         return QString("Mensile");
+    case WEEKLY:
+        return QString("Settimanale");
     default:
         return QString("-");
     }
 }
 event_repeat string_to_event_repeat(QString s){
-    if (s == "Annuale")
+    if (s == "Mensile")
         return MONTHLY;
     if (s == "Annuale")
         return YEARLY;
+    if (s == "Settimanale")
+        return WEEKLY;
     return NOREPEAT;
+}
+
+void Calendar::on_pushButton_delete_1_clicked(){
+    int index = current_page * 3;
+    delete_entry(current_date, index);
+    go_to_page(0);
+}
+
+
+void Calendar::on_pushButton_delete_2_clicked(){
+    int index = current_page * 3 + 1;
+    delete_entry(current_date, index);
+    go_to_page(0);
+}
+
+
+void Calendar::on_pushButton_delete_3_clicked(){
+    int index = current_page * 3 + 2;
+    delete_entry(current_date, index);
+    go_to_page(0);
+}
+
+// i could use current_date
+void Calendar::delete_entry(QDate date, int index){
+    assert(index >= 0);
+    assert(index < c_map[current_date].size());
+    c_map[date]
+        .erase(c_map[date].begin() + index);
+    qDebug() << "removed index " << index;
+    //if (index == 0 && c_map[current_date].size()==0){
+      //  ui->calendarWidget->s
+    //}
+}
+
+// edit -> highligth, (copy it to last line) submit last line
+// aggiungi possibilità di lasciare in bianco secondo orario
+// salva su file
+// gestione settimanali e mensili
+// gestione concorrenza
+void Calendar::setColors(){
+    QTextCharFormat format;
+    format.setBackground(Qt::transparent);
+    ui->calendarWidget->setDateTextFormat(QDate() , QTextCharFormat());
+    format.setBackground(QColor(173, 216, 230));
+    for (auto it = c_map.constBegin(); it != c_map.constEnd(); ++it) {
+        if (it.value().length()>0)
+            ui->calendarWidget->setDateTextFormat(it.key(), format);
+    }
 }

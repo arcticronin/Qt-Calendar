@@ -24,6 +24,7 @@ QString event_type_to_string(event_type e);
 enum event_repeat{
     NOREPEAT,
     MONTHLY,
+    WEEKLY,
     YEARLY
 };
 
@@ -74,10 +75,11 @@ private slots:
     void on_calendarWidget_selectionChanged();
     void on_pushButton_clicked();
     void on_comboBox_evento_currentIndexChanged(int index);
-
     void on_pushButton_nextPage_clicked();
-
     void on_pushButton_previousPage_clicked();
+    void on_pushButton_delete_1_clicked();
+    void on_pushButton_delete_2_clicked();
+    void on_pushButton_delete_3_clicked();
 
 private:
     Ui::Calendar *ui;
@@ -90,6 +92,9 @@ private:
     int current_page;
     void update_ui();
     void go_to_page(int page);
+    void delete_entry(QDate date, int index);
+    void insert_event(calendar_event e, event_repeat rep);
+    void setColors();
 };
 
 
