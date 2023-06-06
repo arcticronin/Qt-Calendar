@@ -72,6 +72,7 @@ public:
     QTimeEdit *timeEdit_end;
     QComboBox *comboBox_ripetizione;
     QPushButton *pushButton;
+    QPushButton *pushButton_confirm_edit;
     QSpacerItem *verticalSpacer;
 
     void setupUi(QMainWindow *Calendar)
@@ -93,7 +94,7 @@ public:
         centralwidget->setSizePolicy(sizePolicy1);
         verticalLayoutWidget = new QWidget(centralwidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(0, 0, 625, 441));
+        verticalLayoutWidget->setGeometry(QRect(0, 0, 644, 441));
         verticalLayout_main = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_main->setObjectName(QString::fromUtf8("verticalLayout_main"));
         verticalLayout_main->setSizeConstraint(QLayout::SetDefaultConstraint);
@@ -367,6 +368,12 @@ public:
 
         horizontalLayout->addWidget(pushButton);
 
+        pushButton_confirm_edit = new QPushButton(verticalLayoutWidget);
+        pushButton_confirm_edit->setObjectName(QString::fromUtf8("pushButton_confirm_edit"));
+        pushButton_confirm_edit->setFont(font);
+
+        horizontalLayout->addWidget(pushButton_confirm_edit);
+
 
         verticalLayout_main->addLayout(horizontalLayout);
 
@@ -421,6 +428,7 @@ public:
         comboBox_ripetizione->setItemText(3, QCoreApplication::translate("Calendar", "Annuale", nullptr));
 
         pushButton->setText(QCoreApplication::translate("Calendar", "Create", nullptr));
+        pushButton_confirm_edit->setText(QCoreApplication::translate("Calendar", "Confirm", nullptr));
     } // retranslateUi
 
 };

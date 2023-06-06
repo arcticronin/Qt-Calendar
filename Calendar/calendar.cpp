@@ -10,7 +10,10 @@
 #include <QLayout>
 #include <QBoxLayout>
 #include <QMainWindow>
-#include<QTextCharFormat>
+#include <QTextCharFormat>
+#include <QMessageBox>
+#include <QDataStream>
+#include <QIODevice>
 //#include <QList>
 //#include <QLayout>
 
@@ -21,6 +24,33 @@
 //    ui->verticalLayout_main->setGeometry(rect());
 //    Calendar::resizeEvent(event);
 //}
+
+void Calendar::save(){
+    QFile file("calendar_data.dat");
+    if (file.open(QIODevice::ReadWrite)) {
+        QDataStream stream(&file);
+        stream << c_map;
+        file.close();
+        return;
+    }
+}
+
+// Loading the c_map from a file
+
+void Calendar::load(){
+    QFile file("calendar_data.dat");
+    if (file.open(QIODevice::ReadOnly)) {
+        QDataStream stream(&file);
+        stream >> c_map;
+        file.close();
+        return;
+    }
+}
+
+
+
+
+
 
 Calendar::Calendar(QWidget *parent)
     : QMainWindow(parent)
@@ -33,6 +63,7 @@ Calendar::Calendar(QWidget *parent)
     ui->calendarWidget->setSelectedDate(current_date);
     ui->calendarWidget->setMaximumDate(QDate(2023,12,31));
     //qDebug() << "max date: " << ui->calendarWidget->maximumDate().toString();
+    this->load();
     this->update_ui();
 
     //setLayout(ui->verticalLayout_main);
@@ -67,6 +98,7 @@ void Calendar::update_ui(){
     // pagina deve essere zero all'inizio
     current_page = 0;
     ui->pushButton_previousPage->setEnabled(false);
+    ui->pushButton_confirm_edit->setEnabled(false);
     auto it = this->c_map.find(current_date);
     //if (it != this->c_map.end()) {
     if (it != this->c_map.end()&&
@@ -86,6 +118,7 @@ void Calendar::update_ui(){
     }
     ui->label->setText(current_date.toString("dd/MM/yyyy"));
     this->setColors();
+
     this->go_to_page(current_page);
 }
 
@@ -149,7 +182,9 @@ void Calendar::on_pushButton_clicked(){
         qDebug() << "evento singolo";
     }else if (ui->timeEdit_start->time() >=
         ui->timeEdit_end->time()){
-        qDebug() << "WARNING orario inserito non valido, vado lo stesso";
+        QMessageBox::critical(nullptr, "Error",
+                              ("duration not valid: "
+                               "use 00 if you don't want to specify end time"));
         return;
     }
     // check if date entry exists or create one
@@ -159,29 +194,11 @@ void Calendar::on_pushButton_clicked(){
         c_map[current_date] = QVector<calendar_event>();
     }
 
-    // check overlapping
-    for (int i = 0; i < c_map[current_date].size(); i++){
-        if (checkEventsOverlap(tmp, c_map[current_date][i])){
-            qDebug() << "event is overlapping";
-        }
-    }
-
-
-    // se è montly o yearly controlla che non ci siano sovrapposizioni
-    // su tutte le chiavi della mappa
-
-    // check on map
     insert_event(tmp, tmp.repeat);
-    //c_map[current_date].push_back(tmp);
-    //qSort(c_map[current_date]);
-    std::sort(c_map[current_date].begin(),
-              c_map[current_date].end());
-
-    // azzerare page
     this->update_ui();
 }
 
-void Calendar::insert_event(calendar_event e, event_repeat rep){
+int Calendar::insert_event(calendar_event e, event_repeat rep){
     switch (rep){
     case WEEKLY:
         for (QDate d = current_date;
@@ -189,8 +206,10 @@ void Calendar::insert_event(calendar_event e, event_repeat rep){
              d = d.addDays(7)){
             for (int i = 0; i < c_map[d].size(); i++){
                 if (checkEventsOverlap(e, c_map[d][i])){
-                    qDebug() << "event is overlapping";
-                    //return;
+                    QMessageBox::information(nullptr, "Information",
+                                             ("Event Overlapping on " +
+                                              d.toString() ));
+                    return -1;
                 }
             }
         }
@@ -209,8 +228,10 @@ void Calendar::insert_event(calendar_event e, event_repeat rep){
              d = d.addMonths(1)){
             for (int i = 0; i < c_map[d].size(); i++){
                 if (checkEventsOverlap(e, c_map[d][i])){
-                    qDebug() << "event is overlapping";
-                    //return;
+                    QMessageBox::information(nullptr, "Information",
+                                             ("Event Overlapping on " +
+                                              d.toString() ));
+                    return -1;
                 }
             }
         }
@@ -228,8 +249,10 @@ void Calendar::insert_event(calendar_event e, event_repeat rep){
              d = d.addYears(1)){
                 for (int i = 0; i < c_map[d].size(); i++){
                     if (checkEventsOverlap(e, c_map[d][i])){
-                        qDebug() << "event is overlapping";
-                        //return;
+                        QMessageBox::information(nullptr, "Information",
+                                             ("Event Overlapping on " +
+                                              d.toString() ));
+                        return -1;
                     }
                 }     }
         for (QDate d = current_date;
@@ -239,17 +262,24 @@ void Calendar::insert_event(calendar_event e, event_repeat rep){
                 c_map[d].push_back(e);
                 std::sort(c_map[d].begin(),c_map[d].end());
         }
-
         break;
+
     default:
         for (int i = 0; i < c_map[current_date].size(); i++){
             if (checkEventsOverlap(e, c_map[current_date][i])){
-            qDebug() << "event is overlapping";
-            //return;
+                QMessageBox::information(nullptr, "Information",
+                                             ("Event Overlapping on " +
+                                              current_date.toString() ));
+                qDebug() << "event is overlapping";
+                return -1;
             }
         }
         c_map[current_date].push_back(e);
+        std::sort(c_map[current_date].begin(),
+                  c_map[current_date].end());
     }
+    save();
+    return 0;
 }
 
 void Calendar::on_comboBox_evento_currentIndexChanged(int index){
@@ -284,6 +314,8 @@ bool operator<(const calendar_event& lhs,
 // check for ovarlapping -> true if overlaps
 bool checkEventsOverlap(const calendar_event& event1,
                         const calendar_event& event2) {
+    if (event1.type == EVENT || event2.type == EVENT)
+        return false;
     if (event1.time_end == QTime(0,0)&&
         event2.time_end == QTime(0,0)){
         return event1.time_start == event2.time_start;
@@ -479,22 +511,15 @@ void Calendar::on_pushButton_delete_3_clicked(){
 }
 
 // i could use current_date
-void Calendar::delete_entry(QDate date, int index){
+calendar_event Calendar::delete_entry(QDate date, int index){
     assert(index >= 0);
     assert(index < c_map[current_date].size());
-    c_map[date]
-        .erase(c_map[date].begin() + index);
-    qDebug() << "removed index " << index;
-    //if (index == 0 && c_map[current_date].size()==0){
-      //  ui->calendarWidget->s
-    //}
+    return c_map[date].takeAt(index);
 }
 
 // edit -> highligth, (copy it to last line) submit last line
-// aggiungi possibilità di lasciare in bianco secondo orario
 // salva su file
-// gestione settimanali e mensili
-// gestione concorrenza
+
 void Calendar::setColors(){
     QTextCharFormat format;
     format.setBackground(Qt::transparent);
@@ -505,3 +530,77 @@ void Calendar::setColors(){
             ui->calendarWidget->setDateTextFormat(it.key(), format);
     }
 }
+
+
+
+QDataStream& operator<<(QDataStream& out, const calendar_event& event)
+{
+    out << event.type;
+    out << event.descr;
+    out << event.time_start;
+    out << event.time_end;
+    out << event.repeat;
+    return out;
+}
+
+QDataStream& operator>>(QDataStream& in, calendar_event& event)
+{
+    in >> event.type;
+    in >> event.descr;
+    in >> event.time_start;
+    in >> event.time_end;
+    in >> event.repeat;
+    return in;
+}
+
+void Calendar::on_pushButton_edit_1_clicked()
+{
+    int index = current_page * 3;
+    ui->pushButton_edit_1->setStyleSheet("background-color: lightblue;");
+    ui->pushButton_edit_1->setEnabled(false);
+    //delete_entry(current_date, index);
+    edit_single_event(index);
+    go_to_page(0);
+}
+
+
+void Calendar::on_pushButton_edit_2_clicked()
+{
+    int index = current_page * 3 + 1;
+    ui->pushButton_edit_2->setStyleSheet("background-color: lightblue;");
+    ui->pushButton_edit_2->setEnabled(false);
+    //delete_entry(current_date, index);
+    edit_single_event(index);
+    go_to_page(0);
+}
+
+
+void Calendar::on_pushButton_edit_3_clicked()
+{
+    int index = current_page * 3 + 2;
+    ui->pushButton_edit_3->setStyleSheet("background-color: lightblue;");
+    ui->pushButton_edit_3->setEnabled(false);
+    //delete_entry(current_date, index);
+    edit_single_event(index);
+    go_to_page(0);
+}
+
+int Calendar::edit_single_event(int index){
+    ui->pushButton_confirm_edit->setEnabled(true);
+    ui->pushButton_confirm_edit->setStyleSheet("background-color: lightblue;");
+    ui->calendarWidget->setEnabled(false);
+    ui->pushButton->setVisible(false);
+    return 0;
+}
+
+
+void Calendar::on_pushButton_confirm_edit_clicked()
+{
+
+}
+
+void clean(){
+    //remove keys with an empty array
+    // before saving
+}
+

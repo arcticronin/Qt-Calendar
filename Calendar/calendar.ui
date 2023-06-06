@@ -31,7 +31,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>625</width>
+      <width>644</width>
       <height>441</height>
      </rect>
     </property>
@@ -517,6 +517,18 @@
          </property>
          <property name="text">
           <string>Create</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_confirm_edit">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Confirm</string>
          </property>
         </widget>
        </item>

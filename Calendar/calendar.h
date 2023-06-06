@@ -7,6 +7,9 @@
 #include <QVector>
 #include <QMap>
 #include <QDebug>
+#include <QFile>
+#include <QDataStream>
+
 //#include <QBoxLayout>
 
 QT_BEGIN_NAMESPACE
@@ -50,6 +53,13 @@ struct calendar_event{
         time_end(of),
         repeat(rep)
         {}
+    //calendar_event(const calendar_event& other)
+    //                    : type(other.type),
+    //                      descr(other.descr),
+    //                      time_start(other.time_start),
+    //                      time_end(other.time_end),
+    //                      repeat(other.repeat)
+    //    {}
     void print(){
         qDebug() << event_type_to_string(type);
         qDebug() << descr;
@@ -62,6 +72,10 @@ struct calendar_event{
 bool operator<(const calendar_event& event1, const calendar_event& event2);
 bool checkEventsOverlap(const calendar_event& event1,
                         const calendar_event& event2);
+
+QDataStream& operator<<(QDataStream& out, const calendar_event& event);
+QDataStream& operator>>(QDataStream& in, calendar_event& event);
+
 
 class Calendar : public QMainWindow
 {
@@ -81,20 +95,32 @@ private slots:
     void on_pushButton_delete_2_clicked();
     void on_pushButton_delete_3_clicked();
 
+    void on_pushButton_edit_1_clicked();
+
+    void on_pushButton_edit_2_clicked();
+
+    void on_pushButton_edit_3_clicked();
+
+    void on_pushButton_confirm_edit_clicked();
+
 private:
     Ui::Calendar *ui;
     QMap<QDate,QVector<calendar_event>> c_map;
     //QMap<QDate,QVector<calendar_event>> c_map_weekly;
     //QMap<QDate,QVector<calendar_event>> c_map_monthly;
     //QMap<QDate,QVector<calendar_event>> c_map_yearly;
-
     QDate current_date;
     int current_page;
+
     void update_ui();
     void go_to_page(int page);
-    void delete_entry(QDate date, int index);
-    void insert_event(calendar_event e, event_repeat rep);
+    calendar_event delete_entry(QDate date, int index);
+    int insert_event(calendar_event e, event_repeat rep);
     void setColors();
+    void clean();
+    void save();
+    void load();
+    int edit_single_event(int index);
 };
 
 
