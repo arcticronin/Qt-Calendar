@@ -94,7 +94,7 @@ public:
         centralwidget->setSizePolicy(sizePolicy1);
         verticalLayoutWidget = new QWidget(centralwidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(0, 0, 644, 441));
+        verticalLayoutWidget->setGeometry(QRect(200, 50, 667, 441));
         verticalLayout_main = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_main->setObjectName(QString::fromUtf8("verticalLayout_main"));
         verticalLayout_main->setSizeConstraint(QLayout::SetDefaultConstraint);
@@ -103,6 +103,9 @@ public:
         calendarWidget->setObjectName(QString::fromUtf8("calendarWidget"));
         sizePolicy1.setHeightForWidth(calendarWidget->sizePolicy().hasHeightForWidth());
         calendarWidget->setSizePolicy(sizePolicy1);
+        QFont font;
+        font.setPointSize(12);
+        calendarWidget->setFont(font);
 
         verticalLayout_main->addWidget(calendarWidget);
 
@@ -110,9 +113,9 @@ public:
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         label_2 = new QLabel(verticalLayoutWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        QFont font;
-        font.setPointSize(14);
-        label_2->setFont(font);
+        QFont font1;
+        font1.setPointSize(11);
+        label_2->setFont(font1);
 
         horizontalLayout_2->addWidget(label_2);
 
@@ -123,22 +126,22 @@ public:
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
         label->setSizePolicy(sizePolicy2);
-        QFont font1;
-        font1.setPointSize(14);
-        font1.setBold(true);
-        label->setFont(font1);
+        QFont font2;
+        font2.setPointSize(11);
+        font2.setBold(true);
+        label->setFont(font2);
 
         horizontalLayout_2->addWidget(label);
 
         label_vecSize_2 = new QLabel(verticalLayoutWidget);
         label_vecSize_2->setObjectName(QString::fromUtf8("label_vecSize_2"));
-        label_vecSize_2->setFont(font);
+        label_vecSize_2->setFont(font1);
 
         horizontalLayout_2->addWidget(label_vecSize_2);
 
         label_vecSize = new QLabel(verticalLayoutWidget);
         label_vecSize->setObjectName(QString::fromUtf8("label_vecSize"));
-        label_vecSize->setFont(font);
+        label_vecSize->setFont(font1);
 
         horizontalLayout_2->addWidget(label_vecSize);
 
@@ -151,10 +154,10 @@ public:
         sizePolicy3.setVerticalStretch(0);
         sizePolicy3.setHeightForWidth(pushButton_previousPage->sizePolicy().hasHeightForWidth());
         pushButton_previousPage->setSizePolicy(sizePolicy3);
-        QFont font2;
-        font2.setPointSize(14);
-        font2.setBold(false);
-        pushButton_previousPage->setFont(font2);
+        QFont font3;
+        font3.setPointSize(12);
+        font3.setBold(false);
+        pushButton_previousPage->setFont(font3);
 
         horizontalLayout_9->addWidget(pushButton_previousPage);
 
@@ -181,7 +184,7 @@ public:
         horizontalLayout_data_1->setObjectName(QString::fromUtf8("horizontalLayout_data_1"));
         label_tipo_1 = new QLabel(verticalLayoutWidget);
         label_tipo_1->setObjectName(QString::fromUtf8("label_tipo_1"));
-        label_tipo_1->setFont(font);
+        label_tipo_1->setFont(font1);
 
         horizontalLayout_data_1->addWidget(label_tipo_1);
 
@@ -192,37 +195,37 @@ public:
         sizePolicy4.setVerticalStretch(0);
         sizePolicy4.setHeightForWidth(label_descrizione_1->sizePolicy().hasHeightForWidth());
         label_descrizione_1->setSizePolicy(sizePolicy4);
-        label_descrizione_1->setFont(font);
+        label_descrizione_1->setFont(font1);
 
         horizontalLayout_data_1->addWidget(label_descrizione_1);
 
         label_start_1 = new QLabel(verticalLayoutWidget);
         label_start_1->setObjectName(QString::fromUtf8("label_start_1"));
-        label_start_1->setFont(font);
+        label_start_1->setFont(font1);
 
         horizontalLayout_data_1->addWidget(label_start_1);
 
         label_end_1 = new QLabel(verticalLayoutWidget);
         label_end_1->setObjectName(QString::fromUtf8("label_end_1"));
-        label_end_1->setFont(font);
+        label_end_1->setFont(font1);
 
         horizontalLayout_data_1->addWidget(label_end_1);
 
         label_ripetizione_1 = new QLabel(verticalLayoutWidget);
         label_ripetizione_1->setObjectName(QString::fromUtf8("label_ripetizione_1"));
-        label_ripetizione_1->setFont(font);
+        label_ripetizione_1->setFont(font1);
 
         horizontalLayout_data_1->addWidget(label_ripetizione_1);
 
         pushButton_edit_1 = new QPushButton(verticalLayoutWidget);
         pushButton_edit_1->setObjectName(QString::fromUtf8("pushButton_edit_1"));
-        pushButton_edit_1->setFont(font);
+        pushButton_edit_1->setFont(font1);
 
         horizontalLayout_data_1->addWidget(pushButton_edit_1);
 
         pushButton_delete_1 = new QPushButton(verticalLayoutWidget);
         pushButton_delete_1->setObjectName(QString::fromUtf8("pushButton_delete_1"));
-        pushButton_delete_1->setFont(font);
+        pushButton_delete_1->setFont(font1);
 
         horizontalLayout_data_1->addWidget(pushButton_delete_1);
 
@@ -233,43 +236,43 @@ public:
         horizontalLayout_data_2->setObjectName(QString::fromUtf8("horizontalLayout_data_2"));
         label_tipo_2 = new QLabel(verticalLayoutWidget);
         label_tipo_2->setObjectName(QString::fromUtf8("label_tipo_2"));
-        label_tipo_2->setFont(font);
+        label_tipo_2->setFont(font1);
 
         horizontalLayout_data_2->addWidget(label_tipo_2);
 
         label_descrizione_2 = new QLabel(verticalLayoutWidget);
         label_descrizione_2->setObjectName(QString::fromUtf8("label_descrizione_2"));
-        label_descrizione_2->setFont(font);
+        label_descrizione_2->setFont(font1);
 
         horizontalLayout_data_2->addWidget(label_descrizione_2);
 
         label_start_2 = new QLabel(verticalLayoutWidget);
         label_start_2->setObjectName(QString::fromUtf8("label_start_2"));
-        label_start_2->setFont(font);
+        label_start_2->setFont(font1);
 
         horizontalLayout_data_2->addWidget(label_start_2);
 
         label_end_2 = new QLabel(verticalLayoutWidget);
         label_end_2->setObjectName(QString::fromUtf8("label_end_2"));
-        label_end_2->setFont(font);
+        label_end_2->setFont(font1);
 
         horizontalLayout_data_2->addWidget(label_end_2);
 
         label_ripetizione_2 = new QLabel(verticalLayoutWidget);
         label_ripetizione_2->setObjectName(QString::fromUtf8("label_ripetizione_2"));
-        label_ripetizione_2->setFont(font);
+        label_ripetizione_2->setFont(font1);
 
         horizontalLayout_data_2->addWidget(label_ripetizione_2);
 
         pushButton_edit_2 = new QPushButton(verticalLayoutWidget);
         pushButton_edit_2->setObjectName(QString::fromUtf8("pushButton_edit_2"));
-        pushButton_edit_2->setFont(font);
+        pushButton_edit_2->setFont(font1);
 
         horizontalLayout_data_2->addWidget(pushButton_edit_2);
 
         pushButton_delete_2 = new QPushButton(verticalLayoutWidget);
         pushButton_delete_2->setObjectName(QString::fromUtf8("pushButton_delete_2"));
-        pushButton_delete_2->setFont(font);
+        pushButton_delete_2->setFont(font1);
 
         horizontalLayout_data_2->addWidget(pushButton_delete_2);
 
@@ -280,43 +283,43 @@ public:
         horizontalLayout_data_3->setObjectName(QString::fromUtf8("horizontalLayout_data_3"));
         label_tipo_3 = new QLabel(verticalLayoutWidget);
         label_tipo_3->setObjectName(QString::fromUtf8("label_tipo_3"));
-        label_tipo_3->setFont(font);
+        label_tipo_3->setFont(font1);
 
         horizontalLayout_data_3->addWidget(label_tipo_3);
 
         label_descrizione_3 = new QLabel(verticalLayoutWidget);
         label_descrizione_3->setObjectName(QString::fromUtf8("label_descrizione_3"));
-        label_descrizione_3->setFont(font);
+        label_descrizione_3->setFont(font1);
 
         horizontalLayout_data_3->addWidget(label_descrizione_3);
 
         label_start_3 = new QLabel(verticalLayoutWidget);
         label_start_3->setObjectName(QString::fromUtf8("label_start_3"));
-        label_start_3->setFont(font);
+        label_start_3->setFont(font1);
 
         horizontalLayout_data_3->addWidget(label_start_3);
 
         label_end_3 = new QLabel(verticalLayoutWidget);
         label_end_3->setObjectName(QString::fromUtf8("label_end_3"));
-        label_end_3->setFont(font);
+        label_end_3->setFont(font1);
 
         horizontalLayout_data_3->addWidget(label_end_3);
 
         label_ripetizione_3 = new QLabel(verticalLayoutWidget);
         label_ripetizione_3->setObjectName(QString::fromUtf8("label_ripetizione_3"));
-        label_ripetizione_3->setFont(font);
+        label_ripetizione_3->setFont(font1);
 
         horizontalLayout_data_3->addWidget(label_ripetizione_3);
 
         pushButton_edit_3 = new QPushButton(verticalLayoutWidget);
         pushButton_edit_3->setObjectName(QString::fromUtf8("pushButton_edit_3"));
-        pushButton_edit_3->setFont(font);
+        pushButton_edit_3->setFont(font1);
 
         horizontalLayout_data_3->addWidget(pushButton_edit_3);
 
         pushButton_delete_3 = new QPushButton(verticalLayoutWidget);
         pushButton_delete_3->setObjectName(QString::fromUtf8("pushButton_delete_3"));
-        pushButton_delete_3->setFont(font);
+        pushButton_delete_3->setFont(font1);
 
         horizontalLayout_data_3->addWidget(pushButton_delete_3);
 
@@ -336,6 +339,7 @@ public:
 
         lineEdit = new QLineEdit(verticalLayoutWidget);
         lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+        lineEdit->setMinimumSize(QSize(100, 0));
         lineEdit->setFont(font);
 
         horizontalLayout->addWidget(lineEdit);

@@ -10,8 +10,6 @@
 #include <QFile>
 #include <QDataStream>
 
-//#include <QBoxLayout>
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class Calendar; }
 QT_END_NAMESPACE
@@ -22,7 +20,6 @@ enum event_type{
     EVENT
 };
 
-QString event_type_to_string(event_type e);
 
 enum event_repeat{
     NOREPEAT,
@@ -31,6 +28,7 @@ enum event_repeat{
     YEARLY
 };
 
+QString event_type_to_string(event_type e);
 QString event_repeat_to_string(event_repeat e);
 event_repeat string_to_event_repeat(QString s);
 
@@ -69,6 +67,7 @@ struct calendar_event{
     }
 };
 
+bool valid_event(calendar_event c_e);
 bool operator<(const calendar_event& event1, const calendar_event& event2);
 bool checkEventsOverlap(const calendar_event& event1,
                         const calendar_event& event2);
@@ -94,13 +93,9 @@ private slots:
     void on_pushButton_delete_1_clicked();
     void on_pushButton_delete_2_clicked();
     void on_pushButton_delete_3_clicked();
-
     void on_pushButton_edit_1_clicked();
-
     void on_pushButton_edit_2_clicked();
-
     void on_pushButton_edit_3_clicked();
-
     void on_pushButton_confirm_edit_clicked();
 
 private:
@@ -111,16 +106,18 @@ private:
     //QMap<QDate,QVector<calendar_event>> c_map_yearly;
     QDate current_date;
     int current_page;
+    int selected_button; // used to edit events
 
     void update_ui();
     void go_to_page(int page);
     calendar_event delete_entry(QDate date, int index);
+    calendar_event create_event_from_ui();
     int insert_event(calendar_event e, event_repeat rep);
     void setColors();
     void clean();
     void save();
     void load();
-    int edit_single_event(int index);
+    void edit_mode(bool b);
 };
 
 

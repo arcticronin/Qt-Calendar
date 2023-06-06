@@ -29,9 +29,9 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>644</width>
+      <x>200</x>
+      <y>50</y>
+      <width>667</width>
       <height>441</height>
      </rect>
     </property>
@@ -47,6 +47,11 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
       </widget>
      </item>
      <item>
@@ -55,7 +60,7 @@
         <widget class="QLabel" name="label_2">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -73,7 +78,7 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
            <bold>true</bold>
           </font>
          </property>
@@ -86,7 +91,7 @@
         <widget class="QLabel" name="label_vecSize_2">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -98,7 +103,7 @@
         <widget class="QLabel" name="label_vecSize">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -118,7 +123,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>14</pointsize>
+             <pointsize>12</pointsize>
              <bold>false</bold>
             </font>
            </property>
@@ -131,7 +136,7 @@
           <widget class="QLabel" name="label_page">
            <property name="font">
             <font>
-             <pointsize>14</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
@@ -146,7 +151,7 @@
           <widget class="QPushButton" name="pushButton_nextPage">
            <property name="font">
             <font>
-             <pointsize>14</pointsize>
+             <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
@@ -164,7 +169,7 @@
         <widget class="QLabel" name="label_tipo_1">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -182,7 +187,7 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -194,7 +199,7 @@
         <widget class="QLabel" name="label_start_1">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -206,7 +211,7 @@
         <widget class="QLabel" name="label_end_1">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -218,7 +223,7 @@
         <widget class="QLabel" name="label_ripetizione_1">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -230,7 +235,7 @@
         <widget class="QPushButton" name="pushButton_edit_1">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -242,7 +247,7 @@
         <widget class="QPushButton" name="pushButton_delete_1">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -258,7 +263,7 @@
         <widget class="QLabel" name="label_tipo_2">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -270,7 +275,7 @@
         <widget class="QLabel" name="label_descrizione_2">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -282,7 +287,7 @@
         <widget class="QLabel" name="label_start_2">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -294,7 +299,7 @@
         <widget class="QLabel" name="label_end_2">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -306,7 +311,7 @@
         <widget class="QLabel" name="label_ripetizione_2">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -318,7 +323,7 @@
         <widget class="QPushButton" name="pushButton_edit_2">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -330,7 +335,7 @@
         <widget class="QPushButton" name="pushButton_delete_2">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -346,7 +351,7 @@
         <widget class="QLabel" name="label_tipo_3">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -358,7 +363,7 @@
         <widget class="QLabel" name="label_descrizione_3">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -370,7 +375,7 @@
         <widget class="QLabel" name="label_start_3">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -382,7 +387,7 @@
         <widget class="QLabel" name="label_end_3">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -394,7 +399,7 @@
         <widget class="QLabel" name="label_ripetizione_3">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -406,7 +411,7 @@
         <widget class="QPushButton" name="pushButton_edit_3">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -418,7 +423,7 @@
         <widget class="QPushButton" name="pushButton_delete_3">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>11</pointsize>
           </font>
          </property>
          <property name="text">
@@ -437,7 +442,7 @@
         <widget class="QComboBox" name="comboBox_evento">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <item>
@@ -454,9 +459,15 @@
        </item>
        <item>
         <widget class="QLineEdit" name="lineEdit">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
         </widget>
@@ -465,7 +476,7 @@
         <widget class="QTimeEdit" name="timeEdit_start">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
         </widget>
@@ -474,7 +485,7 @@
         <widget class="QTimeEdit" name="timeEdit_end">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
         </widget>
@@ -483,7 +494,7 @@
         <widget class="QComboBox" name="comboBox_ripetizione">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <item>
@@ -512,7 +523,7 @@
         <widget class="QPushButton" name="pushButton">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
@@ -524,7 +535,7 @@
         <widget class="QPushButton" name="pushButton_confirm_edit">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
