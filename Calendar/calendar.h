@@ -15,38 +15,52 @@ QT_END_NAMESPACE
 
 
 enum event_type{
-    ACTIVITY,	// 1
-    EVENT		// 0
+    ACTIVITY,
+    EVENT
 };
 
+QString event_type_to_string(event_type e);
 
+enum event_repeat{
+    NOREPEAT,
+    MONTHLY,
+    YEARLY
+};
+
+QString event_repeat_to_string(event_repeat e);
+event_repeat string_to_event_repeat(QString s);
 
 struct calendar_event{
     event_type type;
     QString descr;
     QTime time_start;
     QTime time_end;
+    event_repeat repeat;
     calendar_event(){}
     calendar_event(
             const event_type &t,
             const QString &de,
             const QTime &oi,
-            const QTime &of):
+            const QTime &of,
+            const event_repeat &rep):
         type(t),
         descr(de),
         time_start(oi),
-        time_end(of)
+        time_end(of),
+        repeat(rep)
         {}
     void print(){
-        qDebug() << type;
+        qDebug() << event_type_to_string(type);
         qDebug() << descr;
         qDebug() << time_start.toString();
         qDebug() << time_end.toString();
+        qDebug() << event_repeat_to_string(repeat);
     }
 };
 
 bool operator<(const calendar_event& event1, const calendar_event& event2);
-bool checkEventsOverlap(const calendar_event& event1, const calendar_event& event2);
+bool checkEventsOverlap(const calendar_event& event1,
+                        const calendar_event& event2);
 
 class Calendar : public QMainWindow
 {

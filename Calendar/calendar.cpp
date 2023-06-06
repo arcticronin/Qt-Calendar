@@ -9,13 +9,17 @@
 #include <QTimeEdit>
 #include <QLayout>
 #include <QBoxLayout>
+#include <QMainWindow>
 //#include <QList>
 //#include <QLayout>
 
 
 //std::map<QDate,std::vector<calendar_event>> cmap = new std::map<QDate,std::vector<calendar_event>>;
 //QDate current_date = QDate(2023, 6, 1);
-
+//Calendar::resizeEvent(QResizeEvent *event){
+//    ui->verticalLayout_main->setGeometry(rect());
+//    Calendar::resizeEvent(event);
+//}
 
 Calendar::Calendar(QWidget *parent)
     : QMainWindow(parent)
@@ -27,13 +31,25 @@ Calendar::Calendar(QWidget *parent)
     //current_date = QDate(2020, 6, 3);
     ui->calendarWidget->setSelectedDate(current_date);
     ui->calendarWidget->setMaximumDate(QDate(2023,12,31));
-
-    QDate ev1 = QDate(2023, 6, 15);
-    QDate ev2 = QDate(2023, 6, 30);
-    c_map[ev1] = QVector<calendar_event>();
-    c_map[ev2] = QVector<calendar_event>();
-    qDebug() << "max date: " << ui->calendarWidget->maximumDate().toString();
+    //qDebug() << "max date: " << ui->calendarWidget->maximumDate().toString();
     this->update_ui();
+
+    //setLayout(ui->verticalLayout_main);
+
+    //this->setLayout(ui->verticalLayout_main);
+    //setCentralWidget(ui->centralwidget);
+    //Set the main layout of the central widget to a vertical layout
+    //QVBoxLayout* mainLayout = new QVBoxLayout(ui->centralwidget);
+    //mainLayout->addWidget(ui->calendarWidget);
+    //mainLayout->addWidget(ui->label);
+    //mainLayout->addWidget(ui->label_vecSize);
+    //mainLayout->addWidget(ui->pushButton_previousPage);
+    //mainLayout->addWidget(ui->pushButton_nextPage);
+
+    // Set the central widget of the main window to contain the main layout
+    //QWidget* centralWidget = new QWidget(this);
+    //centralWidget->setLayout(ui->verticalLayout_main);
+    //this->setCentralWidget(centralWidget);
 }
 
 Calendar::~Calendar()
@@ -87,9 +103,13 @@ void Calendar::on_pushButton_clicked(){
     QString tmp_descr;
     QTime tmp_time_start;
     QTime tmp_time_end;
+    event_repeat tmp_repeat;
 
     (ui->comboBox_evento->currentText() == "Evento")?
         tmp_type = EVENT: tmp_type = ACTIVITY;
+
+    tmp_repeat = string_to_event_repeat
+        (ui->comboBox_ripetizione->currentText());
 
     tmp_time_start = ui->timeEdit_start->time();
     tmp_time_end = ui->timeEdit_end->time();
@@ -115,7 +135,8 @@ void Calendar::on_pushButton_clicked(){
 
 
 
-    calendar_event tmp(tmp_type, tmp_descr, tmp_time_start, tmp_time_end);
+    calendar_event tmp(tmp_type, tmp_descr, tmp_time_start, tmp_time_end,
+                       tmp_repeat);
     qDebug() << "printing tmp";
     tmp.print();
 
@@ -138,7 +159,8 @@ void Calendar::on_pushButton_clicked(){
         }
     }
 
-    // se è montly o yearly controlla che non ci siano sovrapposizioni su tutte le chiavi della mappa
+    // se è montly o yearly controlla che non ci siano sovrapposizioni
+    // su tutte le chiavi della mappa
 
     // check on map
 
@@ -182,8 +204,10 @@ bool operator<(const calendar_event& lhs,
 
 
 // check for ovarlapping
-bool checkEventsOverlap(const calendar_event& event1, const calendar_event& event2) {
-    if (event1.time_end <= event2.time_start || event2.time_end <= event1.time_start) {
+bool checkEventsOverlap(const calendar_event& event1,
+                        const calendar_event& event2) {
+    if (event1.time_end <= event2.time_start ||
+        event2.time_end <= event1.time_start) {
         return false;  // events do not overlap
     } else {
         return true; // events overlap
@@ -207,11 +231,17 @@ void Calendar::on_pushButton_previousPage_clicked()
 
 void Calendar::go_to_page(int page){
     current_page = page;
+    ui->label_page->setText(QString::number(page));
     (current_page > 1)?
         ui->pushButton_previousPage->setEnabled(true):
         ui->pushButton_previousPage->setEnabled(false);
 
     int number_of_events  = c_map[current_date].size();
+
+    (number_of_events - (current_page * 3) > 0)?
+        ui->pushButton_nextPage->setEnabled(true):
+        ui->pushButton_nextPage->setEnabled(false);
+
     int shown_events = 0;
 
     QVector<QHBoxLayout*> layouts = {
@@ -220,10 +250,30 @@ void Calendar::go_to_page(int page){
         ui->centralwidget->findChild<QHBoxLayout*>("horizontalLayout_data_3")
     };
     //QLabel* labels[] = {} ma così sono piu tranquillo
-    QVector<QLabel*> labels = {
+    QVector<QLabel*> tipo_labels = {
+        ui->label_tipo_1,
+        ui->label_tipo_2,
+        ui->label_tipo_3
+    };
+    QVector<QLabel*> descrizione_labels = {
         ui->label_descrizione_1,
         ui->label_descrizione_2,
         ui->label_descrizione_3
+    };
+    QVector<QLabel*> time_start_labels = {
+        ui->label_start_1,
+        ui->label_start_2,
+        ui->label_start_3
+    };
+    QVector<QLabel*> time_end_labels = {
+        ui->label_end_1,
+        ui->label_end_2,
+        ui->label_end_3
+    };
+    QVector<QLabel*> ripetizione_labels = {
+        ui->label_ripetizione_1,
+        ui->label_ripetizione_2,
+        ui->label_ripetizione_3
     };
 
     for (const auto& lyt : layouts){
@@ -239,9 +289,25 @@ void Calendar::go_to_page(int page){
         }else{
             assert (lyt!= nullptr);
             qDebug()<< "fill event";
-            labels[shown_events]->setText(c_map[current_date]
+            // fill labels
+            descrizione_labels[shown_events]->setText(c_map[current_date]
                                                [(current_page*3)+shown_events]
                                                    .descr);
+            time_start_labels[shown_events]->setText(c_map[current_date]
+                                               [(current_page*3)+shown_events]
+                                                   .time_start.toString());
+            time_end_labels[shown_events]->setText(c_map[current_date]
+                                               [(current_page*3)+shown_events]
+                                                   .time_end.toString());
+            tipo_labels[shown_events]->setText(event_type_to_string
+                                                      (c_map[current_date]
+                                               [(current_page*3)+shown_events]
+                                                   .type));
+            ripetizione_labels[shown_events]->setText(event_repeat_to_string
+                                                      (c_map[current_date]
+                                               [(current_page*3)+shown_events]
+                                                   .repeat));
+
             for (int i = 0; i < lyt->count(); ++i) {
                 QWidget* widget = lyt->itemAt(i)->widget();
                 if (widget){
@@ -251,12 +317,44 @@ void Calendar::go_to_page(int page){
         shown_events += 1;
         }
     }
-    if (shown_events < 3){
-        ui->pushButton_nextPage->setEnabled(false);
-    }
+    // sembra sbagliato
+    //if (shown_events < 3){
+    //    ui->pushButton_nextPage->setEnabled(false);
+    //}
     if (current_page > 0){
         ui->pushButton_previousPage->setEnabled(true);
     }
 }
 
 // todo disable > button on some conditions
+QString event_type_to_string(event_type e){
+    switch(e){
+    case ACTIVITY:
+        return QString("Attività");
+        //break;
+    case EVENT:
+        return QString("Attività");
+    default:
+        qDebug() << "event parsing error";
+        return QString("ERROR");
+    }
+}
+
+QString event_repeat_to_string(event_repeat e){
+    switch(e){
+    case YEARLY:
+        return QString("Annuale");
+        //break;
+    case MONTHLY:
+        return QString("Mensile");
+    default:
+        return QString("-");
+    }
+}
+event_repeat string_to_event_repeat(QString s){
+    if (s == "Annuale")
+        return MONTHLY;
+    if (s == "Annuale")
+        return YEARLY;
+    return NOREPEAT;
+}
