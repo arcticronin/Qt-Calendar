@@ -101,13 +101,9 @@ private slots:
 private:
     Ui::Calendar *ui;
     QMap<QDate,QVector<calendar_event>> c_map;
-    //QMap<QDate,QVector<calendar_event>> c_map_weekly;
-    //QMap<QDate,QVector<calendar_event>> c_map_monthly;
-    //QMap<QDate,QVector<calendar_event>> c_map_yearly;
     QDate current_date;
     int current_page;
     int selected_button; // used to edit events
-
     void update_ui();
     void go_to_page(int page);
     calendar_event delete_entry(QDate date, int index);

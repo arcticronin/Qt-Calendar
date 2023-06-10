@@ -15,38 +15,6 @@
 #include <QDataStream>
 #include <QIODevice>
 #include <algorithm>
-//#include <QList>
-//#include <QLayout>
-
-
-//std::map<QDate,std::vector<calendar_event>> cmap = new std::map<QDate,std::vector<calendar_event>>;
-//QDate current_date = QDate(2023, 6, 1);
-//Calendar::resizeEvent(QResizeEvent *event){
-//    ui->verticalLayout_main->setGeometry(rect());
-//    Calendar::resizeEvent(event);
-//}
-
-void Calendar::save(){
-    QFile file("calendar_data.serialized");
-    if (file.open(QIODevice::ReadWrite)) {
-        QDataStream stream(&file);
-        stream << c_map;
-        file.close();
-        return;
-    }
-}
-
-// Loading the c_map from a file
-
-void Calendar::load(){
-    QFile file("calendar_data.serialized");
-    if (file.open(QIODevice::ReadOnly)) {
-        QDataStream stream(&file);
-        stream >> c_map;
-        file.close();
-        return;
-    }
-}
 
 Calendar::Calendar(QWidget *parent)
     : QMainWindow(parent)
@@ -57,7 +25,8 @@ Calendar::Calendar(QWidget *parent)
     current_date = QDate::currentDate();
     selected_button = - 1; // using this while editing events
     ui->calendarWidget->setSelectedDate(current_date);
-    ui->calendarWidget->setMaximumDate(QDate(2023,12,31));
+    ui->calendarWidget->setMaximumDate(QDate(2100,12,31));
+    ui->calendarWidget->setMinimumDate(QDate(1900,1,1));
     this->load();
     this->ui->centralwidget->setLayout(ui->verticalLayout_main);
     this->setCentralWidget(ui->centralwidget);
@@ -70,8 +39,7 @@ Calendar::~Calendar()
     delete ui;
 }
 
-// more an update day??
-// i should implement a nextpage and previous page
+
 void Calendar::update_ui(){
     current_date = ui->calendarWidget->selectedDate();
     current_page = 0;
@@ -100,10 +68,10 @@ void Calendar::update_ui(){
 
 
 void Calendar::on_calendarWidget_selectionChanged(){
-    qDebug() << "updating interface";
     this->update_ui();
 }
 
+// takes input from Input Line and compose and returns a struct calendar_event
 calendar_event Calendar::create_event_from_ui(){
     event_type tmp_type;
     QString tmp_descr;
@@ -121,6 +89,7 @@ calendar_event Calendar::create_event_from_ui(){
                           tmp_time_end, tmp_repeat);
 }
 
+// checks if an event is velid by its own
 bool valid_event(calendar_event c_e){
     // label check
     if (c_e.descr.isEmpty()) {
@@ -141,9 +110,16 @@ bool valid_event(calendar_event c_e){
 }
 
 
+// new Event submitted:
+// steps:
+//  check if valid
+//  created entry in the map for current day if doesn't exist
+//  calling insert_event
+// key factor: i event submission fails I still have an empty map entry
+// removing them with clean()
 void Calendar::on_pushButton_clicked(){
     calendar_event tmp = create_event_from_ui();
-    qDebug() << "printing tmp";
+    qDebug() << "printing tmp:";
     tmp.print();
     if (!valid_event(tmp))
         return;
@@ -157,6 +133,11 @@ void Calendar::on_pushButton_clicked(){
     this->update_ui();
 }
 
+
+// event Insertion:
+// checks repetition
+// checks if it overlaps with another activity
+// saves and cleans
 int Calendar::insert_event(calendar_event e, event_repeat rep){
     switch (rep){
     case WEEKLY:
@@ -233,14 +214,16 @@ int Calendar::insert_event(calendar_event e, event_repeat rep){
             }
         }
         c_map[current_date].push_back(e);
-        //std::sort(c_map[current_date].begin(),
-        //          c_map[current_date].end());
+        // note: qsort deprecated
         std::sort(c_map[current_date].begin(), c_map[current_date].end());
     }
-        save();
-        return 0;
+    clean();
+    save();
+    return 0;
 }
 
+// if event duration is all day
+// if activity duration can be modified and is set back to default 00:00
 void Calendar::on_comboBox_evento_currentIndexChanged(int index){
     if (index == 1){
         qDebug() << "selected Evento";
@@ -332,6 +315,7 @@ void Calendar::go_to_page(int page){
         ui->centralwidget->findChild<QHBoxLayout*>("horizontalLayout_data_2"),
         ui->centralwidget->findChild<QHBoxLayout*>("horizontalLayout_data_3")
     };
+
     //QLabel* labels[] = {} ma così sono piu tranquillo
     QVector<QLabel*> tipo_labels = {
         ui->label_tipo_1,
@@ -415,7 +399,6 @@ QString event_type_to_string(event_type e){
     switch(e){
     case ACTIVITY:
         return QString("Attività");
-        //break;
     case EVENT:
         return QString("Event");
     default:
@@ -471,10 +454,14 @@ void Calendar::on_pushButton_delete_3_clicked(){
 // i could use current_date
 calendar_event Calendar::delete_entry(QDate date, int index){
     assert(index >= 0);
-    assert(index < c_map[current_date].size());
+    assert(index <= c_map[current_date].size());
     return c_map[date].takeAt(index);
 }
 
+// set visual representation of calendarWidget days light blue
+// I could also cycle for just days belonging to the current month on screen
+// using
+// ui->QCalendarWidget.monthShown()
 void Calendar::setColors(){
     QTextCharFormat format;
     format.setBackground(Qt::transparent);
@@ -487,7 +474,7 @@ void Calendar::setColors(){
 }
 
 
-//  serialize
+//  Needed to serialize
 
 QDataStream& operator<<(QDataStream& out, const calendar_event& event)
 {
@@ -532,8 +519,16 @@ void Calendar::on_pushButton_edit_3_clicked()
     edit_mode(true);
 }
 
+
+// edit mode/ normal mode toggle:
+// EDIT MODE : No navigation permitted,
+// copies the event submitted to Edit in the Input line
+// changes "Create" -> "Confirm"
 void Calendar::edit_mode(bool b){
     int index = current_page * 3 + (selected_button - 1);
+
+
+
     ui->pushButton_confirm_edit->setEnabled(b);
     b?
         ui->pushButton_confirm_edit->setStyleSheet
@@ -552,9 +547,11 @@ void Calendar::edit_mode(bool b){
     ui->pushButton_nextPage->setEnabled(!b);
     ui->pushButton_previousPage->setEnabled(!b);
     if (b) {
-        ui->comboBox_ripetizione->setCurrentIndex(0);
         ui->timeEdit_start->setTime(c_map[current_date][index].time_start);
-        ui->timeEdit_start->setTime(c_map[current_date][index].time_end);
+        ui->timeEdit_end->setTime(c_map[current_date][index].time_end);
+        ui->lineEdit->setText(c_map[current_date][index].descr);
+        ui->comboBox_ripetizione->setCurrentIndex(0);
+
     }else {
         ui->pushButton_edit_1->setStyleSheet("");
         ui->pushButton_edit_2->setStyleSheet("");
@@ -562,7 +559,9 @@ void Calendar::edit_mode(bool b){
     }
 }
 
-
+// tries to insert edited version of event:
+// removing the event I was Editing
+// if not succesfull re-inserts it
 void Calendar::on_pushButton_confirm_edit_clicked()
 {
     int index = current_page * 3 + (selected_button - 1);
@@ -578,11 +577,36 @@ void Calendar::on_pushButton_confirm_edit_clicked()
     this->update_ui();
 }
 
-void Calendar::clean(){
+// serializes c_map to a file (if no file found it creates it)
+auto Calendar::save() -> void{
+    //this->clean(); I am using clean explicitly
+    QFile file("calendar_data.serialized");
+    if (file.open(QIODevice::ReadWrite)) {
+        QDataStream stream(&file);
+        stream << c_map;
+        file.close();
+        return;
+    }
+}
+
+// Loads the c_map from a file
+void Calendar::load(){
+    QFile file("calendar_data.serialized");
+    if (file.open(QIODevice::ReadOnly)) {
+        QDataStream stream(&file);
+        stream >> c_map;
+        file.close();
+        return;
+    }
+}
+
+// function to clean the map, removes entries with empty calendar_event vector
+void Calendar::clean(){ // compression purposes
     for (auto it = c_map.begin(); it != c_map.end(); ){
         if (it.value().isEmpty())
-            it = c_map.erase(it);
+            it = c_map.erase(it); // cancella entry e gestisce puntatore
         else
             ++it;
     }
 }
+
